@@ -131,7 +131,6 @@ static PARSER_INT_TYPE evaluateOperatorExpression(char *start, char *end, char *
 		clearError();
 		a = evaluateExpression(start, pos);
 		if (!error) {
-			clearError();
 			b = evaluateExpression(pos + 1, end);
 			if (!error)
 				return charToOp(*pos)(a, b);
