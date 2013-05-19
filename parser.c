@@ -14,37 +14,41 @@
 #include <math.h>
 
 
-typedef int (*op_func)(int, int);
+typedef PARSER_INT_TYPE (*op_func)(PARSER_INT_TYPE, PARSER_INT_TYPE);
 
-void clearError();
-void evalAssert(int isOk);
+static void clearError();
+static void evalAssert(int isOk);
 
-op_func charToOp(char op);
-int operatorAddition(int a, int b);
-int operatorSubtraction(int a, int b);
-int operatorMultiplication(int a, int b);
-int operatorDivision(int a, int b);
-int operatorExponent(int a, int b);
+static op_func charToOp(char op);
+static PARSER_INT_TYPE operatorAddition(PARSER_INT_TYPE a, PARSER_INT_TYPE b);
+static PARSER_INT_TYPE operatorSubtraction(PARSER_INT_TYPE a, PARSER_INT_TYPE b);
+static PARSER_INT_TYPE operatorMultiplication(PARSER_INT_TYPE a, PARSER_INT_TYPE b);
+static PARSER_INT_TYPE operatorDivision(PARSER_INT_TYPE a, PARSER_INT_TYPE b);
+static PARSER_INT_TYPE operatorExponent(PARSER_INT_TYPE a, PARSER_INT_TYPE b);
 
-int evaluateExpression(char *start, char *end);
-int evaluateOperatorExpression(char *start, char *end, char *ops);
-int evaluateIntegerExpression(char *start, char *end);
-int evaluateParanthesisExpression(char *start, char *end);
-int evaluateNegativeExpression(char *start, char *end);
+static PARSER_INT_TYPE evaluateExpression(char *start, char *end);
+static PARSER_INT_TYPE evaluateOperatorExpression(char *start, char *end, char *ops);
+static PARSER_INT_TYPE evaluatePARSER_INT_TYPEegerExpression(char *start, char *end);
+static PARSER_INT_TYPE evaluateParanthesisExpression(char *start, char *end);
+static PARSER_INT_TYPE evaluateNegativeExpression(char *start, char *end);
 
-void trimWhiteSpace(char **start, char **end);
-char *strpbrkReverse(char *start, char *end, char *needles);
-
-
-static int error = PARSER_ERROR_NONE;
+static char *strpbrkReverse(char *start, char *end, char *needles);
 
 
-int eval(char str[]) {
+static PARSER_INT_TYPE error = PARSER_ERROR_NONE;
+
+
+PARSER_INT_TYPE parserEval(char str[]) {
 	clearError();
 	return evaluateExpression(str, str + strlen(str));
 }
 
-op_func charToOp(char op) {
+int parserGetError() {
+	return error;
+}
+
+
+static op_func charToOp(char op) {
 	switch (op) {
 	case '+': return operatorAddition;
 	case '-': return operatorSubtraction;
@@ -56,29 +60,29 @@ op_func charToOp(char op) {
 	return NULL;
 }
 
-int operatorAddition(int a, int b) {
+static PARSER_INT_TYPE operatorAddition(PARSER_INT_TYPE a, PARSER_INT_TYPE b) {
 	return a + b;
 }
 
-int operatorSubtraction(int a, int b) {
+static PARSER_INT_TYPE operatorSubtraction(PARSER_INT_TYPE a, PARSER_INT_TYPE b) {
 	return a - b;
 }
 
-int operatorMultiplication(int a, int b) {
+static PARSER_INT_TYPE operatorMultiplication(PARSER_INT_TYPE a, PARSER_INT_TYPE b) {
 	return a * b;
 }
 
-int operatorDivision(int a, int b) {
+static PARSER_INT_TYPE operatorDivision(PARSER_INT_TYPE a, PARSER_INT_TYPE b) {
 	return a / b;
 }
 
-int operatorExponent(int a, int b) {
-	return (int)pow(a, b);
+static PARSER_INT_TYPE operatorExponent(PARSER_INT_TYPE a, PARSER_INT_TYPE b) {
+	return (PARSER_INT_TYPE)pow(a, b);
 }
 
-int evaluateExpression(char *start, char *end) {
+static PARSER_INT_TYPE evaluateExpression(char *start, char *end) {
 	evalAssert(start < end);
-	int result;
+	PARSER_INT_TYPE result;
 
 	while (*start == ' ' && start <= end)
 		start += 1;
@@ -110,16 +114,16 @@ int evaluateExpression(char *start, char *end) {
 		return result;
 
 	clearError();
-	result = evaluateIntegerExpression(start, end);
+	result = evaluatePARSER_INT_TYPEegerExpression(start, end);
 	if (!error)
 		return result;
 
 	return 0;
 }
 
-int evaluateOperatorExpression(char *start, char *end, char *ops) {
+static PARSER_INT_TYPE evaluateOperatorExpression(char *start, char *end, char *ops) {
 	evalAssert(start < end);
-	int a, b;
+	PARSER_INT_TYPE a, b;
 	char *pos = strpbrkReverse(start, end, ops);
 	evalAssert(pos != NULL && pos < end);
 
@@ -138,7 +142,7 @@ int evaluateOperatorExpression(char *start, char *end, char *ops) {
 	return 0;
 }
 
-int evaluateIntegerExpression(char *start, char *end) {
+static PARSER_INT_TYPE evaluatePARSER_INT_TYPEegerExpression(char *start, char *end) {
 	evalAssert(start < end);
 
 	evalAssert(start < end);
@@ -150,7 +154,7 @@ int evaluateIntegerExpression(char *start, char *end) {
 	evalAssert(*start >= '1' && *start <= '9');
 	if (error)
 		return 0;
-	int result =  *start - '0';
+	PARSER_INT_TYPE result =  *start - '0';
 	start += 1;
 
 	while (start < end) {
@@ -164,7 +168,7 @@ int evaluateIntegerExpression(char *start, char *end) {
 	return result;
 }
 
-int evaluateParanthesisExpression(char *start, char *end) {
+static PARSER_INT_TYPE evaluateParanthesisExpression(char *start, char *end) {
 	evalAssert(start < end);
 	evalAssert(*start == '(');
 	evalAssert(*(end - 1) == ')');
@@ -173,7 +177,7 @@ int evaluateParanthesisExpression(char *start, char *end) {
 	return evaluateExpression(start + 1, end - 1);
 }
 
-int evaluateNegativeExpression(char *start, char *end) {
+static PARSER_INT_TYPE evaluateNegativeExpression(char *start, char *end) {
 	evalAssert(start < end);
 	evalAssert(*start == '-');
 	if (error)
@@ -181,29 +185,18 @@ int evaluateNegativeExpression(char *start, char *end) {
 	return -evaluateExpression(start + 1, end);
 }
 
-int getError() {
-	return error;
-}
-
-void clearError() {
+static void clearError() {
 	error = PARSER_ERROR_NONE;
 }
 
-void evalAssert(int isOk) {
+static void evalAssert(int isOk) {
 	if (!isOk)
 		error = PARSER_ERROR_FAILED;
 }
 
-void trimWhiteSpace(char **start, char **end) {
-	while ((**start == ' ' || **start == '\t' || **start == '\r' || **start == '\n') && *start <= *end)
-		*start += 1;
-	while ((**(end - 1) == ' ' || **(end - 1) == '\t' || **(end - 1) == '\r' || **(end - 1) == '\n') && *start <= *end)
-		*end -= 1;
-}
-
 // Finds the last occurrence of any character in needles
 // within the string between start and end
-char *strpbrkReverse(char *start, char *end, char *needles)
+static char *strpbrkReverse(char *start, char *end, char *needles)
 {
 	const char * sp;
 	char c;
@@ -215,30 +208,3 @@ char *strpbrkReverse(char *start, char *end, char *needles)
 	}
 	return NULL;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

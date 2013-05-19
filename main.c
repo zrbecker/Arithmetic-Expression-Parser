@@ -25,11 +25,11 @@ int main(int argc, char *argv[]) {
 		if (strcmp(line, "exit") == 0)
 			break;
 
-		int result = eval(line);
-		if (getError()) {
+		PARSER_INT_TYPE result = parserEval(line);
+		if (parserGetError()) {
 			printf("Failed to evaluate.\n\n");
 		} else {
-			printf("%d\n\n", result);
+			printf("%lld\n\n", result);
 		}
 	}
 

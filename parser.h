@@ -11,7 +11,9 @@
 #define PARSER_ERROR_NONE		0
 #define PARSER_ERROR_FAILED		1
 
-int eval(char string[]);
-int getError();
+#define PARSER_INT_TYPE	long long
+
+PARSER_INT_TYPE parserEval(char string[]);
+int parserGetError();
 
 #endif /* PARSER_H_ */
