@@ -125,9 +125,9 @@ static PARSER_INT_TYPE evaluateOperatorExpression(char *start, char *end, char *
 	evalAssert(start < end);
 	PARSER_INT_TYPE a, b;
 	char *pos = strpbrkReverse(start, end, ops);
-	evalAssert(pos != NULL && pos < end);
+	evalAssert(pos != NULL);
 
-	while (pos && pos < end) {
+	while (pos) {
 		clearError();
 		a = evaluateExpression(start, pos);
 		if (!error) {
