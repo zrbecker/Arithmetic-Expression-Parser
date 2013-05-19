@@ -28,7 +28,7 @@ static PARSER_INT_TYPE operatorExponent(PARSER_INT_TYPE a, PARSER_INT_TYPE b);
 
 static PARSER_INT_TYPE evaluateExpression(char *start, char *end);
 static PARSER_INT_TYPE evaluateOperatorExpression(char *start, char *end, char *ops);
-static PARSER_INT_TYPE evaluatePARSER_INT_TYPEegerExpression(char *start, char *end);
+static PARSER_INT_TYPE evaluateIntegerExpression(char *start, char *end);
 static PARSER_INT_TYPE evaluateParanthesisExpression(char *start, char *end);
 static PARSER_INT_TYPE evaluateNegativeExpression(char *start, char *end);
 
@@ -114,7 +114,7 @@ static PARSER_INT_TYPE evaluateExpression(char *start, char *end) {
 		return result;
 
 	clearError();
-	result = evaluatePARSER_INT_TYPEegerExpression(start, end);
+	result = evaluateIntegerExpression(start, end);
 	if (!error)
 		return result;
 
@@ -142,7 +142,7 @@ static PARSER_INT_TYPE evaluateOperatorExpression(char *start, char *end, char *
 	return 0;
 }
 
-static PARSER_INT_TYPE evaluatePARSER_INT_TYPEegerExpression(char *start, char *end) {
+static PARSER_INT_TYPE evaluateIntegerExpression(char *start, char *end) {
 	evalAssert(start < end);
 
 	evalAssert(start < end);
